@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 from agents import set_default_openai_api
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routers.assistant import router as assistant_router
@@ -55,11 +55,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def add_request_id(request: Request, call_next):
+    """Add request ID for tracing."""
+    import uuid
+
+    request_id = request.headers.get("X-Request-ID", str(uuid.uuid4())[:8])
+    request.state.request_id = request_id
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+    return response
+
+
+# Routes
 app.include_router(research_router, prefix=f"/{settings.api_version}")
 app.include_router(assistant_router, prefix=f"/{settings.api_version}")
 app.include_router(chat_router, prefix=f"/{settings.api_version}")
 
 
+# Root endpoints
 @app.get("/")
 async def root():
     """Root endpoint with API information."""
@@ -84,6 +99,7 @@ async def root():
 
 
 @app.get("/health")
+@app.get("/api/v1/health")
 async def health_check():
     """Simple health check endpoint."""
     return {

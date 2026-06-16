@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     environment: str = "local"
     app_version: str = "1.0.0"
-    api_version: str = "v1"
+    api_version: str = "api/v1"
     log_level: str = "INFO"
 
     # Database
