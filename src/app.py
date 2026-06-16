@@ -9,6 +9,7 @@ from api.routers.chat import router as chat_router
 from api.routers.research import router as research_router
 from config import settings
 from db import close_db, init_db
+from services.pinecone import AsyncPineconeServerlessHook
 from utils.logging import get_logger
 
 logger = get_logger(__name__)
@@ -31,6 +32,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
+    await AsyncPineconeServerlessHook.cleanup_all()
     await close_db()
 
     logger.info("[app] [lifespan] : Shutdown complete")
