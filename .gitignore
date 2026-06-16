@@ -1,0 +1,167 @@
+# Ignore markdown files in .github directory
+.github/*.md
+
+# Agent-generated documentation (temporary, not version controlled)
+cdocs/
+tex/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Docker
+.dockerignore
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Alembic
+alembic/versions/__pycache__/
+
+# LocalStack
+.localstack/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+.eggs/
+*.egg-info/
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Environment
+.env
+.env.local
+*.env
+
+# Logs
+*.log
+logs/
+
+# Local development
+*.db
+*.sqlite3
+
+# Distribution
+dist/
+build/
+
+# cdocs (AI-generated docs)
+cdocs/
+
+# Security: Scripts with actual credentials
+scripts/populate-dev-secrets.sh
+scripts/populate-*-secrets.sh
+random/
+
+# Development scripts (local only, not version controlled)
+scripts_dev/
+
+# Functional tests with sensitive data (API tokens, passwords)
+tests_func/
+
+# Seed scripts and data (production/test seeding, not version controlled)
+scripts/seed_prod.py
+scripts/test_ingest_prod.py
+scripts/news_data/
+scripts/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+
+# archive
+archive/
