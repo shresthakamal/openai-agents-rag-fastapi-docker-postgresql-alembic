@@ -25,6 +25,26 @@ class Settings(BaseSettings):
     api_version: str = "v1"
     app_version: str = "1.0.0"
 
+    # Pinecone Configuration
+    pinecone_serverless_api_key: str | None = None
+    pinecone_index: str = "ai4u"
+    pinecone_host: str = "https://ai4u-jew04wr.svc.aped-4627-b74a.pinecone.io"
+    pinecone_namespace: str = "global"
+
+    # Voyage AI Configuration
+    voyage_api_key: str | None = None
+    voyage_embed_model: str = "voyage-3"
+    voyage_rerank_model: str = "rerank-2.5"
+    voyage_rerank_top_k: int = 5
+
+    rag_top_k: int = 5
+    rag_candidate_k: int = 20
+
+    # SBERT Configuration
+    sbert_embed_model: str = "sentence-transformers/nli-bert-large"
+    sbert_rerank_model: str = "cross-encoder/ms-marco-MiniLM-L6-v2"
+    sbert_rerank_top_k: int = 5
+
     def build_database_url(self, *, hide_password: bool = False) -> str:
         if self.database_url:
             return self.database_url
