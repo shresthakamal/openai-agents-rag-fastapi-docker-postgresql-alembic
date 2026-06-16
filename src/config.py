@@ -40,11 +40,6 @@ class Settings(BaseSettings):
     rag_top_k: int = 5
     rag_candidate_k: int = 20
 
-    # SBERT Configuration
-    sbert_embed_model: str = "sentence-transformers/nli-bert-large"
-    sbert_rerank_model: str = "cross-encoder/ms-marco-MiniLM-L6-v2"
-    sbert_rerank_top_k: int = 5
-
     def build_database_url(self, *, hide_password: bool = False) -> str:
         if self.database_url:
             return self.database_url

@@ -15,6 +15,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from api.schemas import AgentRequest
+from utils.hooks import run_hooks
 from utils.logging import get_logger
 
 
@@ -171,6 +172,7 @@ async def _run_agent(
             input=request.input,
             context=request.context,
             session=session,
+            hooks=run_hooks,
         )
 
         logger.info(f"{agent_name} completed successfully")
@@ -209,6 +211,7 @@ async def _stream_agent(
                 input=request.input,
                 context=request.context,
                 session=session,
+                hooks=run_hooks,
             )
 
             async for event in stream_result.stream_events():
