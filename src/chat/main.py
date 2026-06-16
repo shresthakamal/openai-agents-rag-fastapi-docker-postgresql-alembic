@@ -1,13 +1,10 @@
 from agents import Agent, ModelSettings
 
-SYSTEM_INSTRUCTION = (
-    "An agent that can chat with the user and answer questions. "
-    "You maintain conversation context using the session history provided for each request."
-)
+from prompts.loader import CHAT_SYSTEM
 
 chat_agent = Agent(
     name="Chat Agent",
-    instructions=SYSTEM_INSTRUCTION,
+    instructions=CHAT_SYSTEM,
     tools=[],
     handoffs=[],
     model_settings=ModelSettings(

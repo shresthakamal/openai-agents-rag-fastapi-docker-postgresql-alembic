@@ -1,10 +1,7 @@
 from agents import Agent
 from pydantic import BaseModel
 
-PROMPT = (
-    "You are a helpful research assistant. Given a query, come up with a set of web searches "
-    "to perform to best answer the query. Output between 5 and 20 terms to query for."
-)
+from prompts.loader import RESEARCH_PLANNER_SYSTEM
 
 
 class WebSearchItem(BaseModel):
@@ -23,6 +20,6 @@ class WebSearchPlan(BaseModel):
 planner_agent = Agent(
     model="gpt-4.1-nano",
     name="Planner Agent",
-    instructions=PROMPT,
+    instructions=RESEARCH_PLANNER_SYSTEM,
     output_type=WebSearchPlan,
 )

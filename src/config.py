@@ -1,6 +1,11 @@
+import logging
+from pathlib import Path
 from urllib.parse import quote_plus
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
@@ -10,35 +15,83 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    openai_api_key: str | None = None
+    environment: str = "local"
+    app_version: str = "1.0.0"
+    api_version: str = "v1"
     log_level: str = "INFO"
-    port: int = 8000
 
-    database_url: str | None = None
-
+    # Database
     postgres_user: str = "akin_chat"
     postgres_password: str = "akin_chat"
     postgres_host: str = "localhost"
     postgres_port: int = 5432
     postgres_db: str = "akin_chat"
 
-    api_version: str = "v1"
-    app_version: str = "1.0.0"
+    # OpenAI
+    openai_api_key: str | None = None
+    database_url: str | None = None
 
-    # Pinecone Configuration
+    # Pinecone
     pinecone_serverless_api_key: str | None = None
     pinecone_index: str = "ai4u"
     pinecone_host: str = "https://ai4u-jew04wr.svc.aped-4627-b74a.pinecone.io"
     pinecone_namespace: str = "global"
 
-    # Voyage AI Configuration
+    # Voyage
     voyage_api_key: str | None = None
     voyage_embed_model: str = "voyage-3"
     voyage_rerank_model: str = "rerank-2.5"
     voyage_rerank_top_k: int = 5
 
+    # RAG
     rag_top_k: int = 5
     rag_candidate_k: int = 20
+
+    # Prompts
+    prompts_dir: Path = Path(__file__).resolve().parent / "prompts"
+
+    @property
+    def is_local(self) -> bool:
+        return self.environment.lower() in ("local", "test", "testing")
+
+    def load_secrets_prefix(self) -> str:
+        return f"akin/{self.environment}/chat"
+
+    @model_validator(mode="after")
+    def load_secrets_from_aws(self) -> "Settings":
+        """Load secrets from AWS Secrets Manager in non-local environments."""
+        if self.is_local:
+            return self
+
+        from utils.secrets import secrets_manager
+
+        # Load database URL
+        if not self.database_url:
+            secret_name = f"{self.load_secrets_prefix()}/db_url"
+            value = secrets_manager.get_secret_sync(secret_name=secret_name)
+            if value:
+                object.__setattr__(self, "database_url", value)
+            else:
+                logger.warning("Could not load %s from Secrets Manager", secret_name)
+
+        # Load other secrets
+        secret_mappings = {
+            "openai_api_key": f"{self.load_secrets_prefix()}/openai_api_key",
+            "pinecone_serverless_api_key": f"{self.load_secrets_prefix()}/pinecone_serverless_api_key",
+            "voyage_api_key": f"{self.load_secrets_prefix()}/voyage_api_key",
+        }
+
+        for field_name, secret_name in secret_mappings.items():
+            if getattr(self, field_name):
+                continue
+
+            value = secrets_manager.get_secret_sync(secret_name=secret_name)
+            if value:
+                object.__setattr__(self, field_name, value)
+            else:
+                logger.warning("Could not load %s from Secrets Manager", secret_name)
+
+        return self
 
     def build_database_url(self, *, hide_password: bool = False) -> str:
         if self.database_url:
