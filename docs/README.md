@@ -12,6 +12,7 @@ Akin Chat is a multi-agent AI platform built on the [OpenAI Agents SDK](https://
 |-----|-------------|
 | [API Endpoints](./API_ENDPOINTS.md) | All HTTP endpoints, request/response shapes, and streaming events |
 | [RAG Pipeline](./RAG.md) | How the assistant agent retrieves and reranks knowledge base documents |
+| [Environment & Secrets](./ENVIRONMENT.md) | Local, LocalStack prod simulation, and real AWS configuration |
 
 ---
 

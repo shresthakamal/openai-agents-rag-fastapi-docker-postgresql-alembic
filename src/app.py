@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from agents import set_default_openai_api
+from agents import set_default_openai_key
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
             "[app] [lifespan] : OPENAI_API_KEY not set; please define it in your .env file"
         )
     else:
-        set_default_openai_api(settings.openai_api_key)
+        set_default_openai_key(settings.openai_api_key)
         logger.info("[app] [lifespan] : OpenAI API key configured")
 
     await init_db()
