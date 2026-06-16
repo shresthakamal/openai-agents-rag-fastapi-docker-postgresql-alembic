@@ -123,6 +123,8 @@ htmlcov/
 # Environment
 .env
 .env.local
+.env.localstack
+.env.prod
 *.env
 
 # Logs
